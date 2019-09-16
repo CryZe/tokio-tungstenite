@@ -19,7 +19,7 @@ stream = ["bytes"]
 
 [dependencies]
 futures-preview = { version = "0.3.0-alpha.18", features = ["async-await", "nightly"] }
-pin-project = "0.4.0-alpha.10"
+pin-project = "0.4.0-alpha.7"
 tokio-io = "0.2.0-alpha.4"
 
 [dependencies.tungstenite]
