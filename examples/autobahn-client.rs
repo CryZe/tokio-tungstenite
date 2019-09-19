@@ -1,17 +1,15 @@
-use futures::{SinkExt, StreamExt};
+use futures::StreamExt;
 use log::*;
-use tokio_tungstenite::{
-    connect_async,
-    tungstenite::Result,
-};
+use tokio_tungstenite::{connect_async, tungstenite::Result};
 use url::Url;
 
 const AGENT: &'static str = "Tungstenite";
 
 async fn get_case_count() -> Result<u32> {
-    let (mut socket, _) = connect_async(Url::parse("ws://localhost:9001/getCaseCount").unwrap()).await?;
+    let (mut socket, _) =
+        connect_async(Url::parse("ws://localhost:9001/getCaseCount").unwrap()).await?;
     let msg = socket.next().await.unwrap()?;
-    socket.close(None)?;
+    socket.close(None).await?;
     Ok(msg.into_text()?.parse::<u32>().unwrap())
 }
 
@@ -22,8 +20,9 @@ async fn update_reports() -> Result<()> {
             AGENT
         ))
         .unwrap(),
-    ).await?;
-    socket.close(None)?;
+    )
+    .await?;
+    socket.close(None).await?;
     Ok(())
 }
 

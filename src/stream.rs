@@ -26,11 +26,11 @@ impl<S: AsyncRead + Unpin, T: AsyncRead + Unpin> AsyncRead for Stream<S, T> {
             Stream::Plain(ref mut s) => {
                 let pinned = unsafe { Pin::new_unchecked(s) };
                 pinned.poll_read(cx, buf)
-            },
+            }
             Stream::Tls(ref mut s) => {
                 let pinned = unsafe { Pin::new_unchecked(s) };
                 pinned.poll_read(cx, buf)
-            },
+            }
         }
     }
 }
@@ -45,37 +45,43 @@ impl<S: AsyncWrite + Unpin, T: AsyncWrite + Unpin> AsyncWrite for Stream<S, T> {
             Stream::Plain(ref mut s) => {
                 let pinned = unsafe { Pin::new_unchecked(s) };
                 pinned.poll_write(cx, buf)
-            },
+            }
             Stream::Tls(ref mut s) => {
                 let pinned = unsafe { Pin::new_unchecked(s) };
                 pinned.poll_write(cx, buf)
-            },
+            }
         }
     }
 
-    fn poll_flush(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), std::io::Error>> {
+    fn poll_flush(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> Poll<Result<(), std::io::Error>> {
         match *self {
             Stream::Plain(ref mut s) => {
                 let pinned = unsafe { Pin::new_unchecked(s) };
                 pinned.poll_flush(cx)
-            },
+            }
             Stream::Tls(ref mut s) => {
                 let pinned = unsafe { Pin::new_unchecked(s) };
                 pinned.poll_flush(cx)
-            },
+            }
         }
     }
 
-    fn poll_shutdown(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Result<(), std::io::Error>> {
+    fn poll_shutdown(
+        mut self: Pin<&mut Self>,
+        cx: &mut Context<'_>,
+    ) -> Poll<Result<(), std::io::Error>> {
         match *self {
             Stream::Plain(ref mut s) => {
                 let pinned = unsafe { Pin::new_unchecked(s) };
                 pinned.poll_shutdown(cx)
-            },
+            }
             Stream::Tls(ref mut s) => {
                 let pinned = unsafe { Pin::new_unchecked(s) };
                 pinned.poll_shutdown(cx)
-            },
+            }
         }
     }
 }

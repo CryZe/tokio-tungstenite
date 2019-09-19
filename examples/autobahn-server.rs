@@ -22,8 +22,10 @@ async fn main() {
     env_logger::init();
 
     let addr = "127.0.0.1:9002"
-        .to_socket_addrs().expect("Not a valid address")
-        .next().expect("Not a socket address");
+        .to_socket_addrs()
+        .expect("Not a valid address")
+        .next()
+        .expect("Not a socket address");
     let socket = TcpListener::bind(&addr).await.unwrap();
     let mut incoming = socket.incoming();
     info!("Listening on: {}", addr);

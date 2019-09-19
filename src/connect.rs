@@ -1,6 +1,6 @@
 //! Connection helper.
-use tokio_net::tcp::TcpStream;
 use tokio_io::{AsyncRead, AsyncWrite};
+use tokio_net::tcp::TcpStream;
 
 use tungstenite::client::url_mode;
 use tungstenite::handshake::client::Response;
@@ -42,7 +42,7 @@ pub(crate) mod encryption {
                 let connected = stream.connect(&domain, socket).await;
                 match connected {
                     Err(e) => Err(Error::Tls(e)),
-                    Ok(s) => Ok(StreamSwitcher::Tls(s))
+                    Ok(s) => Ok(StreamSwitcher::Tls(s)),
                 }
             }
         }
@@ -72,9 +72,7 @@ pub(crate) mod encryption {
     {
         match mode {
             Mode::Plain => Ok(socket),
-            Mode::Tls => Err(Error::Url(
-                "TLS support not compiled in.".into(),
-            )),
+            Mode::Tls => Err(Error::Url("TLS support not compiled in.".into())),
         }
     }
 }

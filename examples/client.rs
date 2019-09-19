@@ -13,7 +13,8 @@
 use std::env;
 use std::io::{self, Write};
 
-use futures::{SinkExt, StreamExt};
+use futures::StreamExt;
+use log::*;
 use tungstenite::protocol::Message;
 
 use tokio::io::AsyncReadExt;
@@ -21,6 +22,8 @@ use tokio_tungstenite::connect_async;
 
 #[tokio::main]
 async fn main() {
+    let _ = env_logger::try_init();
+
     // Specify the server address to which the client will be connecting.
     let connect_addr = env::args()
         .nth(1)
@@ -52,7 +55,7 @@ async fn main() {
     // more work from the remote then we can exit.
     let mut stdout = io::stdout();
     let (mut ws_stream, _) = connect_async(url).await.expect("Failed to connect");
-    println!("WebSocket handshake has been successfully completed");
+    info!("WebSocket handshake has been successfully completed");
 
     while let Some(msg) = stdin_rx.next().await {
         ws_stream.send(msg).await.expect("Failed to send request");
