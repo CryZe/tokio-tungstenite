@@ -5,7 +5,7 @@ use tokio_tungstenite::{accept_async, client_async};
 
 #[tokio::test]
 async fn handshakes() {
-    let (mut tx, rx) = futures::channel::oneshot::channel();
+    let (tx, rx) = futures::channel::oneshot::channel();
 
     let f = async move {
         let address = "0.0.0.0:12345"
@@ -25,7 +25,7 @@ async fn handshakes() {
 
     tokio::spawn(f);
 
-    rx.await;
+    rx.await.expect("Failed to wait for server to be ready");
     let address = "0.0.0.0:12345"
         .to_socket_addrs()
         .expect("Not a valid address")
@@ -35,7 +35,7 @@ async fn handshakes() {
         .await
         .expect("Failed to connect");
     let url = url::Url::parse("ws://localhost:12345/").unwrap();
-    let stream = client_async(url, tcp)
+    let _stream = client_async(url, tcp)
         .await
         .expect("Client failed to connect");
 }
