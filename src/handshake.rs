@@ -159,7 +159,7 @@ where
 {
     type Output = Result<Role::FinalResult, Error<Role>>;
 
-    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         let this = self.project();
         let mut s = this.0.take().expect("future polled after completion");
 

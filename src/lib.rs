@@ -304,7 +304,7 @@ where
 {
     type Output = Result<(), WsError>;
 
-    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         let this = self.project();
         let message = this.message.take().expect("Cannot poll twice");
         Poll::Ready(this.stream.with_context(cx, |s| s.write_message(message)))
@@ -324,7 +324,7 @@ where
 {
     type Output = Result<(), WsError>;
 
-    fn poll(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
+    fn poll(self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Self::Output> {
         let this = self.project();
         let message = this.message.take().expect("Cannot poll twice");
         Poll::Ready(this.stream.with_context(cx, |s| s.close(message)))
